@@ -10,14 +10,18 @@
 
 var textbox = document.getElementById("textbox");
 textbox.onkeydown = function(event) {
-  if (event.key == "Enter" || event.key == " " || event.key == "." || event.key == "," || event.key == "!" || event.key == "?") {
+  if (event.key == " " || event.key == "." || event.key == "," || event.key == "!" || event.key == "?") {
     speak();
+    return;
+  }
+  if (event.key == "Enter") {
+    speak(true);
   }
 }
 
-function speak() {
+function speak(readSentence = false) {
   var text = document.getElementById("textbox").value;
-  const sentences = text.split(/(?<=[\n.!?])/g);
+  const sentences = text.split(/(?<=[.!?])/g);
   if (sentences.length <= 0) {
     return;
   }
@@ -30,7 +34,8 @@ function speak() {
     }
     finalSentence = sentences[sentences.length - 2];
   }
-  if (finalSentence[finalSentence.length - 1] === "." || finalSentence[finalSentence.length - 1] === "!" || finalSentence[finalSentence.length - 1] === "?") {
+  console.log(finalSentence)
+  if (readSentence || finalSentence[finalSentence.length - 1] === "." || finalSentence[finalSentence.length - 1] === "!" || finalSentence[finalSentence.length - 1] === "?") {
     utter(finalSentence);
     return;
   }
