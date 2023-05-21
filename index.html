@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Text to Speech App</title>
+</head>
+<body>
+<h1>Text to Speech App</h1>
+<textarea autofocus id="textbox" style="font-size: 90px;" rows="8"></textarea>
+<script>
+
+var textbox = document.getElementById("textbox");
+textbox.onkeydown = function(event) {
+  if (event.key == "Enter" || event.key == " " || event.key == "." || event.key == "," || event.key == "!" || event.key == "?") {
+    speak();
+  }
+}
+
+function speak() {
+  var text = document.getElementById("textbox").value;
+  const sentences = text.split(/(?<=[\n.!?])/g);
+  if (sentences.length <= 0) {
+    return;
+  }
+  console.log(sentences)
+  let finalSentence = sentences[sentences.length - 1];
+  let finalSentenceIsEmpty = finalSentence.trim().length === 0;
+  if (finalSentenceIsEmpty) {
+    if (sentences.length <= 1) {
+      return;
+    }
+    finalSentence = sentences[sentences.length - 2];
+  }
+  if (finalSentence[finalSentence.length - 1] === "." || finalSentence[finalSentence.length - 1] === "!" || finalSentence[finalSentence.length - 1] === "?") {
+    utter(finalSentence);
+    return;
+  }
+  if (finalSentence[finalSentence.length - 1] === ",") {
+    return;
+  }
+  const finalWord = finalSentence.split(" ").pop();
+  utter(finalWord);
+}
+
+function utter(sentence) {
+  const speechSynthesisUtterance = new SpeechSynthesisUtterance(sentence);
+  speechSynthesisUtterance.rate = 0.6;
+  window.speechSynthesis.speak(speechSynthesisUtterance);
+}
+
+</script>
+</body>
+</html>
