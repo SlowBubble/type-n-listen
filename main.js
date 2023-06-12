@@ -1,5 +1,5 @@
 // Configurations
-const minMsBetweenKeys = 300;
+const minMsBetweenKeys = 500;
 const utterEachLetter = true;
 
 const textbox = document.getElementById("textbox");
@@ -7,14 +7,18 @@ const textbox = document.getElementById("textbox");
 let previousKeyUpTime = 0;
 
 textbox.onkeydown = function(event) {
+  // const isAlphanumericCharacter = event.key.match(/^[a-zA-Z0-9]$/);
+  const isCharacter = event.key.length === 1;
   // Debounce
-  if (event.repeat) {
-    event.preventDefault();
-    return;
-  }
-  if (new Date().getTime() - previousKeyUpTime < minMsBetweenKeys) {
-    event.preventDefault();
-    return;
+  if (isCharacter) {
+    if (event.repeat) {
+      event.preventDefault();
+      return;
+    }
+    if (new Date().getTime() - previousKeyUpTime < minMsBetweenKeys) {
+      event.preventDefault();
+      return;
+    }
   }
 
   if (event.key == " " || event.key == "." || event.key == "," || event.key == "!" || event.key == "?") {
@@ -25,7 +29,7 @@ textbox.onkeydown = function(event) {
     speak(true);
     return;
   }
-  if (utterEachLetter && event.key.match(/^[a-zA-Z]$/) && !event.altKey && !event.ctrlKey && !event.metaKey) {
+  if (utterEachLetter && isCharacter && !event.altKey && !event.ctrlKey && !event.metaKey) {
     utter(event.key, 0.75);
     return;
   }
