@@ -1,5 +1,5 @@
 // Configurations
-const minMsBetweenKeys = 500;
+const minMsBetweenKeys = 10;
 const utterEachLetter = true;
 
 const textbox = document.getElementById("textbox");
